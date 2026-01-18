@@ -1,0 +1,13 @@
+.DS_Store
+*.swp
+*.swo
+
+# Local token files (don’t commit secrets)
+token
+token.txt
+*.token
+.config/plex-keepawake/token
+etc/plex-keepawake/token
+
+# Build/test junk
+.tmp/
