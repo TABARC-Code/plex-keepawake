@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt update
+          sudo apt install -y shellcheck jq curl
+
+      - name: Install shfmt
+        run: |
+          # shfmt isn't always in apt on older images. Grab a release binary.
+          set -euo pipefail
+          ARCH="$(uname -m)"
+          case "$ARCH" in
+            x86_64) A=amd64 ;;
+            aarch64) A=arm64 ;;
+            *) echo "Unsupported arch: $ARCH" ; exit 1 ;;
+          esac
+          VER="v3.9.0"
+          URL="https://github.com/mvdan/sh/releases/download/${VER}/shfmt_${VER}_linux_${A}"
+          curl -fsSL "$URL" -o shfmt
+          chmod +x shfmt
+          sudo mv shfmt /usr/local/bin/shfmt
+          shfmt -version
+
+      - name: Format check (no changes)
+        run: |
+          shfmt -d -i 2 -ci -bn bin/*.sh scripts/*.sh test/*.sh
+
+      - name: ShellCheck
+        run: |
+          shellcheck -x -S warning -P bin:scripts:test bin/*.sh scripts/*.sh test/*.sh
+
+      - name: Smoke tests
+        run: |
+          bash test/smoke.sh
