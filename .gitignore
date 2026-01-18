@@ -2,7 +2,7 @@
 *.swp
 *.swo
 
-# Local token files (don’t commit secrets)
+# Local token files (don’t commit secrets) Seriously doo not bloody share
 token
 token.txt
 *.token
