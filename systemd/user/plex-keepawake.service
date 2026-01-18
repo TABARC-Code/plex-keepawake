@@ -1,0 +1,7 @@
+[Unit]
+Description=Keep awake when Plex is streaming (user)
+
+[Service]
+Type=oneshot
+Environment=WHAT=idle:sleep
+ExecStart=%h/.local/bin/plex-keepawake.sh
