@@ -1,0 +1,10 @@
+[Unit]
+Description=Check Plex sessions every 2 minutes (system)
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=2min
+AccuracySec=10s
+
+[Install]
+WantedBy=timers.target
